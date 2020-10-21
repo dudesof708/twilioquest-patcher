@@ -83,7 +83,7 @@ def process_category(path, challenges):
                 next_f = f'{next_ch}\\validator.js'
                 if args.uninstall:
                     uninstall(next_f)
-                else:
+                elif 'validator.js.old' not in ch_files:
                     process_challenge(f'{next_ch}\\validator.js')
         except:
             pass
