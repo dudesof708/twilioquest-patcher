@@ -1,12 +1,17 @@
 from sys import platform
 from os import getenv, listdir
 from shutil import copyfile
+from argparse import ArgumentParser as parser
 
 if platform.startswith('linux') or platform == 'darwin':
     print("Linux and macOS aren't supported yet!")
     exit()
 
 print('Searching for game install...')
+
+ar_parser = parser()
+ar_parser.add_argument('-u', '--uninstall', help='uninstall hack', action='store_true')
+args = ar_parser.parse_args()
 
 supported_versions = ['3.1.35']
 appdata = getenv('APPDATA')
@@ -62,13 +67,24 @@ def process_challenge(chal, innerText='`pwned by Gideon.`'):
         else:
             print(f'{predef} (context, callback) => ' + '{callback(null,' + innerText + ')}')
 
+def uninstall(f):
+    try:
+        pass
+        # copyfile(f'{f}.old', f)
+    except:
+        pass
+
 def process_category(path, challenges):
     for challenge in challenges:
         try:
             next_ch = f'{path}\\{challenge}'
             ch_files = listdir(next_ch)
             if 'validator.js' in ch_files:
-                process_challenge(f'{next_ch}\\validator.js')
+                next_f = f'{next_ch}\\validator.js'
+                if args.uninstall:
+                    uninstall(next_f)
+                else:
+                    process_challenge(f'{next_ch}\\validator.js')
         except:
             pass
 
@@ -81,3 +97,6 @@ for folder in folders:
         if 'validation' in challenges:
             challenges.remove('validation')
         process_category(folder, challenges)
+
+if args.uninstall:
+    print('Successfully uninstalled hack.')

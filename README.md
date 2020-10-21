@@ -13,4 +13,4 @@ Run `python app.py`. That's it. There's no options.
 
 ## Uninstalling
 
-Don't like the hack and want to play like a normal person? Reinstall the game. An update is coming in the future that will allow you to reverse the hack. Compatible with current hack version as well.
+Run `python app.py --uninstall`. That's it. It's that simple.
