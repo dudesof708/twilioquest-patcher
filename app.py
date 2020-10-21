@@ -52,15 +52,15 @@ folders = listdir(path)
 if 'common' in folders:
     folders.remove('common')
 
-def process_challenge(chal):
+def process_challenge(chal, innerText='`pwned by Gideon.`'):
     predef = 'module.exports = async'
     # copyfile(chal, f'{chal}.old')
     with open(chal, 'r') as f:
         tel = [x for x in f.readlines() if x.startswith('module.exports')][0]
         if 'helper' in tel:
-            print(f'{predef} helper => ' + '{return helper.success(`pwned by Gideon.`);}')
+            print(f'{predef} helper => ' + '{return helper.success(' + innerText + ');}')
         else:
-            print(f'{predef} (context, callback) => ' + '{callback(null,"pwned by Gideon.")}')
+            print(f'{predef} (context, callback) => ' + '{callback(null,' + innerText + ')}')
 
 def process_category(path, challenges):
     for challenge in challenges:
