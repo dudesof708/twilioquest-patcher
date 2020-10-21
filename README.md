@@ -7,10 +7,6 @@ A cheat engine for TwilioQuest.
 * Windows XP+
 * Python 3.7+
 
-### Download
-
-Coming soon.
-
 ## Getting Started
 
 1. Run `python app.py`. That's it. There's no options.

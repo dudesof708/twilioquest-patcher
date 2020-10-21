@@ -1,7 +1,8 @@
 from sys import platform
-from os import getenv, listdir
+from os import getenv, listdir, remove
 from shutil import copyfile
 from argparse import ArgumentParser as parser
+from re import sub
 
 if platform.startswith('linux') or platform == 'darwin':
     print("Linux and macOS aren't supported yet!")
@@ -10,7 +11,7 @@ if platform.startswith('linux') or platform == 'darwin':
 print('Searching for game install...')
 
 ar_parser = parser()
-ar_parser.add_argument('-u', '--uninstall', help='uninstall hack', action='store_true')
+ar_parser.add_argument('-u', '--uninstall', help='uninstall hack', action='store_true', default=False)
 args = ar_parser.parse_args()
 
 supported_versions = ['3.1.35']
@@ -57,20 +58,40 @@ folders = listdir(path)
 if 'common' in folders:
     folders.remove('common')
 
+def extract_success(lines, thi='helper.success'):
+    begin = 0
+    end = 0
+    for i in range(len(lines)):
+        if thi in lines[i]:
+            begin = i
+            for j in range(i, len(lines)):
+                if ';' in lines[j]:
+                    end = j
+                    line = sub('\$\{(.*?)\}', '', ''.join(lines[i:j+1]).split(');')[0]) + ')'
+                    line = sub('value: (.*?)(,| )', "value:'',", line)
+                    line = sub('value: (.*?)}', "value:''}", line)
+                    return line
+
 def process_challenge(chal, innerText='`pwned by Gideon.`'):
-    predef = 'module.exports = async'
-    # copyfile(chal, f'{chal}.old')
+    copyfile(chal, f'{chal}.old')
+    line = ''
     with open(chal, 'r') as f:
-        tel = [x for x in f.readlines() if x.startswith('module.exports')][0]
+        lines = [x.strip() for x in f.readlines()]
+        tel = [x for x in lines if x.startswith('module.exports')][0]
         if 'helper' in tel:
-            print(f'{predef} helper => ' + '{return helper.success(' + innerText + ');}')
+            line = tel + extract_success(lines) + ';return;}'
         else:
-            print(f'{predef} (context, callback) => ' + '{callback(null,' + innerText + ')}')
+            line = tel + extract_success(lines, 'callback(null') + ';return;)}'
+    with open(chal, 'w') as f:
+        f.write(line)
 
 def uninstall(f):
     try:
-        pass
-        # copyfile(f'{f}.old', f)
+        copyfile(f'{f}.old', f)
+        try:
+            remove(f'{f}.old')
+        except:
+            pass
     except:
         pass
 
@@ -100,3 +121,5 @@ for folder in folders:
 
 if args.uninstall:
     print('Successfully uninstalled hack.')
+else:
+    print('Successfully installed hack.')
