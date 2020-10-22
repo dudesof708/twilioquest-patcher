@@ -81,7 +81,7 @@ def process_challenge(chal, innerText='`pwned by Gideon.`'):
         if 'helper' in tel:
             line = tel + extract_success(lines) + ';return;}'
         else:
-            line = tel + extract_success(lines, 'callback(null') + ';return;)}'
+            line = tel + extract_success(lines, 'callback(null') + ';return;}'
     with open(chal, 'w') as f:
         f.write(line)
 
