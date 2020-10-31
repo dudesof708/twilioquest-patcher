@@ -14,7 +14,7 @@ ar_parser = parser()
 ar_parser.add_argument('-u', '--uninstall', help='uninstall hack', action='store_true', default=False)
 args = ar_parser.parse_args()
 
-supported_versions = ['3.1.35']
+supported_versions = ['3.1.35', '3.1.36', '3.1.37']
 appdata = getenv('APPDATA')
 
 if not appdata:
