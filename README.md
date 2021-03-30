@@ -1,6 +1,6 @@
 # TwilioQuest Patcher
 
-A cheat engine for TwilioQuest.
+A cheat engine for TwilioQuest. Written by the [Dudes of 708](https://dudesof708.com).
 
 ## Requires
 
